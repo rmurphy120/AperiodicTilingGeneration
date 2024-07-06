@@ -32,13 +32,13 @@ public class KDPenroseTri {
     }
 
     // Can either be 0, 1, 2, or 3. Represents different triangles used to construct Kites and Darts
-    private short type;
+    private final short type;
     private boolean ghostDrawn = false;
 
     // The three points which define the triangle
-    private double[] p1;
-    private double[] p2;
-    private double[] p3;
+    private final double[] p1;
+    private final double[] p2;
+    private final double[] p3;
 
     private KDPenroseTri[] children;
 
@@ -162,52 +162,40 @@ public class KDPenroseTri {
 
         // Handles each of the 4 cases appropriately. Note 0 and 1 are mirrors of each other and so are 2 and 3
         switch (type) {
-            case 0:
+            case 0 -> {
                 children = new KDPenroseTri[3];
-
                 newPt1 = new double[]{(p1[0] + (baseLength / sideLength) * (p2[0] - p1[0])),
                         (p1[1] + (baseLength / sideLength) * (p2[1] - p1[1]))};
                 newPt2 = new double[]{(p3[0] + (baseLength / sideLength) * (p1[0] - p3[0])),
                         (p3[1] + (baseLength / sideLength) * (p1[1] - p3[1]))};
-
                 children[0] = setTri.set(new KDPenroseTri((short) 2, newPt2, p1, newPt1));
                 children[1] = setTri.set(new KDPenroseTri((short) 1, p3, newPt2, newPt1));
                 children[2] = setTri.set(new KDPenroseTri((short) 0, p3, newPt1, p2));
-
-                break;
-            case 1:
+            }
+            case 1 -> {
                 children = new KDPenroseTri[3];
-
                 newPt1 = new double[]{(p2[0] + (baseLength / sideLength) * (p1[0] - p2[0])),
                         (p2[1] + (baseLength / sideLength) * (p1[1] - p2[1]))};
                 newPt2 = new double[]{(p1[0] + (baseLength / sideLength) * (p3[0] - p1[0])),
                         (p1[1] + (baseLength / sideLength) * (p3[1] - p1[1]))};
-
                 children[0] = setTri.set(new KDPenroseTri((short) 3, newPt1, newPt2, p1));
                 children[1] = setTri.set(new KDPenroseTri((short) 0, p2, newPt2, newPt1));
                 children[2] = setTri.set(new KDPenroseTri((short) 1, p2, p3, newPt2));
-
-                break;
-            case 2:
+            }
+            case 2 -> {
                 children = new KDPenroseTri[2];
-
                 newPt1 = new double[]{(p2[0] + (sideLength / baseLength) * (p3[0] - p2[0])),
                         (p2[1] + (sideLength / baseLength) * (p3[1] - p2[1]))};
-
                 children[0] = setTri.set(new KDPenroseTri((short) 2, newPt1, p3, p1));
                 children[1] = setTri.set(new KDPenroseTri((short) 1, p2, newPt1, p1));
-
-                break;
-            case 3:
+            }
+            case 3 -> {
                 children = new KDPenroseTri[2];
-
                 newPt1 = new double[]{(p2[0] + (sideLength / (PHI * baseLength)) * (p3[0] - p2[0])),
                         (p2[1] + (sideLength / (PHI * baseLength)) * (p3[1] - p2[1]))};
-
                 children[0] = setTri.set(new KDPenroseTri((short) 3, newPt1, p1, p2));
                 children[1] = setTri.set(new KDPenroseTri((short) 0, p3, p1, newPt1));
-
-                break;
+            }
         }
 
         return children;

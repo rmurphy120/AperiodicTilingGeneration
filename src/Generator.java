@@ -27,7 +27,7 @@ public class Generator extends Application {
 
 
     @Override
-    public void start(Stage window) throws Exception {
+    public void start(Stage window) {
         Pane center = new Pane();
 
         // Used to determine the size of the window
@@ -48,7 +48,7 @@ public class Generator extends Application {
             depthTextBox.clear();
 
             // Root triangle is always the same
-            KDPenroseTri rootTri = new KDPenroseTri((short) 2, new double[]{BASE_LENGTH / 2, 0}, new double[]{0, height},
+            KDPenroseTri rootTri = new KDPenroseTri((short) 2, new double[]{BASE_LENGTH / 2., 0}, new double[]{0, height},
                     new double[]{BASE_LENGTH, height});
 
             ArrayList<KDPenroseTri> tiles;
@@ -91,7 +91,7 @@ public class Generator extends Application {
 
         randomSection.setOnAction(event -> {
             // Root triangle is always the same
-            KDPenroseTri rootTri = new KDPenroseTri((short) 2, new double[]{BASE_LENGTH / 2, 0},
+            KDPenroseTri rootTri = new KDPenroseTri((short) 2, new double[]{BASE_LENGTH / 2., 0},
                     new double[]{0, height}, new double[]{BASE_LENGTH, height});
 
             Random r = new Random();
