@@ -19,13 +19,15 @@ public class KDPenroseTri {
     private static final int TOLERANCE = 3;
 
     // Width of lines drawn
-    private static final int LINE_WIDTH = 2;
+    private static final int LINE_WIDTH = 1;
 
     // Primary color
-    private static final Color KITE_COLOR = Color.CORAL;
+    private static final Color KITE_COLOR = Color.FORESTGREEN;
 
     // Secondary color
-    private static final Color DART_COLOR = Color.RED;
+    private static final Color DART_COLOR = Color.LIGHTGREEN;
+
+    private static final Color LINE_COLOR = Color.BLACK;
 
     private static double cartesianLength(double[] p1, double[] p2) {
         return Math.sqrt(Math.pow(p1[0] - p2[0], 2) + Math.pow(p1[1] - p2[1], 2));
@@ -69,24 +71,82 @@ public class KDPenroseTri {
      * @param root the pane that will be drawn on
      */
     public void draw(Pane root) {
-        if (type == 0 || type == 2) {
-            Line l2 = new Line(p1[0], p1[1], p3[0], p3[1]);
-            l2.setStrokeWidth(LINE_WIDTH);
-            root.getChildren().add(l2);
-        } else {
-            Line l1 = new Line(p1[0], p1[1], p2[0], p2[1]);
-            l1.setStrokeWidth(LINE_WIDTH);
-            root.getChildren().add(l1);
+        drawHelper(root, p1, p2, p3);
+    }
+
+    /**
+     * Draws the rectangle as would the regular draw method but scales with respect to a rectangle to the screen
+     *
+     * @param root              root the pane that will be drawn on
+     * @param rectX             the rectangle's left x coordinate
+     * @param rectY             the rectangle's upper y coordinate
+     * @param ratioRectToScreen (screen size) / (rectangle size)
+     */
+    public void drawScaled(Pane root, int rectX, int rectY, double ratioRectToScreen) {
+        double[] scaledP1 = new double[]{ratioRectToScreen * (p1[0] - rectX),
+                ratioRectToScreen * (p1[1] - rectY)};
+        double[] scaledP2 = new double[]{ratioRectToScreen * (p2[0] - rectX),
+                ratioRectToScreen * (p2[1] - rectY)};
+        double[] scaledP3 = new double[]{ratioRectToScreen * (p3[0] - rectX),
+                ratioRectToScreen * (p3[1] - rectY)};
+
+        drawHelper(root, scaledP1, scaledP2, scaledP3);
+    }
+
+    /**
+     * Helper function to reduce copy code in draw and drawScaled
+     *
+     * @param root root the pane that will be drawn on
+     * @param d1   akin to p1
+     * @param d2   akin to p2
+     * @param d3   akin to p3
+     */
+    private void drawHelper(Pane root, double[] d1, double[] d2, double[] d3) {
+        Line l2 = new Line(d1[0], d1[1], d3[0], d3[1]);
+        l2.setStrokeWidth(LINE_WIDTH);
+
+        Line l1 = new Line(d1[0], d1[1], d2[0], d2[1]);
+        l1.setStrokeWidth(LINE_WIDTH);
+
+        switch (type) {
+            case 0 -> {
+                l2.setStroke(LINE_COLOR);
+                l1.setStroke(KITE_COLOR);
+            }
+            case 1 -> {
+                l1.setStroke(LINE_COLOR);
+                l2.setStroke(KITE_COLOR);
+            }
+            case 2 -> {
+                l2.setStroke(LINE_COLOR);
+                l1.setStroke(DART_COLOR);
+            }
+            case 3 -> {
+                l1.setStroke(LINE_COLOR);
+                l2.setStroke(DART_COLOR);
+            }
         }
 
-        Line l3 = new Line(p2[0], p2[1], p3[0], p3[1]);
+        root.getChildren().add(l2);
+        root.getChildren().add(l1);
+
+        Line l3 = new Line(d2[0], d2[1], d3[0], d3[1]);
+        l3.setStroke(LINE_COLOR);
         l3.setStrokeWidth(LINE_WIDTH);
         root.getChildren().add(l3);
 
-        Polygon fill = new Polygon(p1[0], p1[1], p2[0], p2[1], p3[0], p3[1]);
+        Polygon fill = new Polygon(d1[0], d1[1], d2[0], d2[1], d3[0], d3[1]);
         fill.setStroke(Color.rgb(0, 0, 0, 0));
         fill.setFill((type == 0 || type == 1) ? KITE_COLOR : DART_COLOR);
         root.getChildren().add(fill);
+
+        // For formatting
+        fill.toBack();
+
+        if (type == 0 || type == 2)
+            l2.toFront();
+        else
+            l1.toFront();
     }
 
     /**
@@ -109,42 +169,6 @@ public class KDPenroseTri {
         l3.setStrokeWidth(LINE_WIDTH);
         l3.setStroke(Color.GRAY);
         root.getChildren().add(l3);
-    }
-
-    /**
-     * Draws the rectangle as would the regular draw method but scales with respect to a rectangle to the screen
-     *
-     * @param root root the pane that will be drawn on
-     * @param rectX the rectangle's left x coordinate
-     * @param rectY the rectangle's upper y coordinate
-     * @param ratioRectToScreen (screen size) / (rectangle size)
-     */
-    public void drawScaled(Pane root, int rectX, int rectY, double ratioRectToScreen) {
-        int[] scaledP1 = new int[]{(int) (ratioRectToScreen * (p1[0] - rectX)),
-                (int) (ratioRectToScreen * (p1[1] - rectY))};
-        int[] scaledP2 = new int[]{(int) (ratioRectToScreen * (p2[0] - rectX)),
-                (int) (ratioRectToScreen * (p2[1] - rectY))};
-        int[] scaledP3 = new int[]{(int) (ratioRectToScreen * (p3[0] - rectX)),
-                (int) (ratioRectToScreen * (p3[1] - rectY))};
-
-        if (type == 0 || type == 2) {
-            Line l2 = new Line(scaledP1[0], scaledP1[1], scaledP3[0], scaledP3[1]);
-            l2.setStrokeWidth(LINE_WIDTH);
-            root.getChildren().add(l2);
-        } else {
-            Line l1 = new Line(scaledP1[0], scaledP1[1], scaledP2[0], scaledP2[1]);
-            l1.setStrokeWidth(LINE_WIDTH);
-            root.getChildren().add(l1);
-        }
-
-        Line l3 = new Line(scaledP2[0], scaledP2[1], scaledP3[0], scaledP3[1]);
-        l3.setStrokeWidth(LINE_WIDTH);
-        root.getChildren().add(l3);
-
-        Polygon fill = new Polygon(scaledP1[0], scaledP1[1], scaledP2[0], scaledP2[1], scaledP3[0], scaledP3[1]);
-        fill.setStroke(Color.rgb(0, 0, 0, 0));
-        fill.setFill((type == 0 || type == 1) ? KITE_COLOR : DART_COLOR);
-        root.getChildren().add(fill);
     }
 
     /**
