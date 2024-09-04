@@ -2,6 +2,15 @@
 
 <h3>Overview</h3>
 <p>This was a really fun project done over a couple of weeks inspired by Simon Tatham (https://www.chiark.greenend.org.uk/~sgtatham/quasiblog/aperiodic-tilings/). Right now can generate a random subsection of the kite/dart Penrose tiling. The code is set up so that in the future it could be easy to add other aperiodic tiling, such as rhombs Penrose tiling and hat tiling (Mentioned on the website). Has 2 modes with one having two options. The first mode displays the algorithm progressing through the entire triangle at different depths. The 2nd modes first option is to display the triangle with a random subsection taken from it. It helps visualize the optimization algorithm utilized. The other option is a fullscreen which tiles the window. It takes the previous output and scales it up to fullscreen. I consider these options to be progressions of each other, adding more complexity each time with the fullscreen being the most complex.</p>
+
+<h3>Example Outputs</h3>
+<p>Output of the entire triangle</p>
+<img src='Screenshots/Example Output 2.png' style="width:400px;height:400px;">
+<p>Output of a random subsection of the triangle</p>
+<img src='Screenshots/Example Output 3.png' style="width:400px;height:400px;">
+<p>Output of the fullscreen random subsection</p>
+<img src='Screenshots/Example Output.png' style="width:400px;height:400px;">
+
 <h3>Math diagrams</h3>
 The following are a series of diagrams and equations to help with the math supporting the code (There is quite a bit of ambiguous math)
 <br/>
